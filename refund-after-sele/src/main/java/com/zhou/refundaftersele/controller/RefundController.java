@@ -18,7 +18,7 @@ public class RefundController {
     @Resource
     IRefundService refundService;
 
-    @RequestMapping(value = "/money_flow",method = RequestMethod.POST)
+    @RequestMapping(value = "/moneyFlow",method = RequestMethod.POST)
     private MoneyFlowVo MoneyFlow(Integer rId){
         MoneyFlowVo views = refundService.getMoneyFlowByRId(rId);
         return views;

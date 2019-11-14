@@ -3,6 +3,9 @@ package com.example.logisticsmanagement.service;
 import com.example.logisticsmanagement.domain.dto.LogisticsDetailsDto;
 import com.example.logisticsmanagement.domain.dto.LogisticsInfoDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ILogisticsService {
 
     private LogisticsInfoDto getLogisticsInfo(){
@@ -16,12 +19,16 @@ public class ILogisticsService {
                 .build();
     }
 
-    private LogisticsDetailsDto getLogisticsDetails(){
+    private List<LogisticsDetailsDto> getLogisticsDetails(){
         LogisticsDetailsDto logisticsDetailsDto = new LogisticsDetailsDto();
         logisticsDetailsDto.setAddress("明尼苏达");
         logisticsDetailsDto.setExpressNumber("123456789666");
         logisticsDetailsDto.setTimestamp("2019.11.14.12:00");
-        return logisticsDetailsDto;
+        ArrayList<LogisticsDetailsDto> logisticsDetailsDtos = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            logisticsDetailsDtos.add(logisticsDetailsDto);
+        }
+        return logisticsDetailsDtos;
     }
 
 

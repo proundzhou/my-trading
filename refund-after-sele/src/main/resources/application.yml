@@ -16,6 +16,6 @@ spring:
       discovery:
         server-addr: 39.97.253.89:8848
 mybatis:
-  mapper-locations: classpath://mappers/**/*.xml
+  mapper-locations: classpath:/mappers/**/*.xml
 
 

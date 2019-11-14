@@ -7,7 +7,14 @@ public class AliBankInfo {
     private String cardType;
     private String bank;
     private String key;
-    private String[] messages;
+    private Message[] messages;
     private Boolean validated;
     private String stat;
+
+    private class Message{
+        String errorCodes;
+        String name;
+
+    }
+
 }

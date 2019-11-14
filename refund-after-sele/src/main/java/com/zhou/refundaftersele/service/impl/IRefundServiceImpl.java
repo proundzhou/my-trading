@@ -1,9 +1,11 @@
 package com.zhou.refundaftersele.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zhou.goodmanagement.domain.dto.GoodsDto;
 import com.zhou.goodmanagement.service.GoodService;
 import com.zhou.refundaftersele.domain.dto.AliBankInfo;
+import com.zhou.refundaftersele.domain.dto.OrderMapDto;
 import com.zhou.refundaftersele.domain.entity.RefundOrder;
 import com.zhou.refundaftersele.domain.vo.MoneyFlowVo;
 import com.zhou.refundaftersele.domain.vo.RefundInfoVo;
@@ -13,10 +15,16 @@ import com.zhou.refundaftersele.service.IOrderService;
 import com.zhou.refundaftersele.service.IRefundService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +46,7 @@ public class IRefundServiceImpl implements IRefundService {
         MoneyFlowVo moneyFlowVo = new MoneyFlowVo();
         /*获取退款信息*/
         RefundOrder refundOrder = refundOrderMapper.selectByPrimaryKey(rId);
+        log.info(refundOrder.toString());
         RefundOrderVo orderVo = new RefundOrderVo();
 
         /*设置编号,时间，退款状态，金额,*/
@@ -45,9 +54,36 @@ public class IRefundServiceImpl implements IRefundService {
 
         /*获取银行卡数据*/
         Integer rBankCard = refundOrder.getRBankCard();
-        String url = "https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo=";
-        String bankInfoJson = restTemplate.getForObject(url + rBankCard.toString(), String.class);
-        AliBankInfo bankInfo = (AliBankInfo)JSONObject.parse(bankInfoJson);
+        //String url = "https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo=";
+        //String bankInfoJson = restTemplate.getForObject(url + rBankCard.toString(), String.class);
+
+
+        String bankInfoJson = null;
+        URI uri = URI.create("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo="+rBankCard.toString());
+        try {
+            URL url = uri.toURL();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(HttpMethod.POST.name());
+            connection.setDoOutput(true);
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            bankInfoJson = reader.readLine();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(bankInfoJson==null){
+            log.info("ali银行信息接口出错");
+            return null;
+        }
+
+        Object bankInfoObject = JSONObject.parse(bankInfoJson);
+        AliBankInfo  bankInfo = new AliBankInfo();
+        BeanUtils.copyProperties(bankInfoObject,bankInfo);
         if(bankInfo.getStat()!="ok" || !bankInfo.getValidated()){
             log.info("银行卡号出错");
         }
@@ -86,7 +122,7 @@ public class IRefundServiceImpl implements IRefundService {
             refundInfoVo.setGoodsDto(goods);
 
             //获取退款项购买信息,调用服务输入订单id，商品Id，返回订单金额
-            Double spend = orderService.getSpend(refund.getOId(),refund.getGId());
+            Double spend = orderService.getSpend(new OrderMapDto(refund.getOId(),refund.getGId()));
             refundInfoVo.setSpend(spend);
 
             //添加进列表
