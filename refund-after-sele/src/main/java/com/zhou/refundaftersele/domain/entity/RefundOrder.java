@@ -21,6 +21,11 @@ public class RefundOrder {
     private Integer oId;
 
     /**
+     * 商品id
+     */
+    private Integer gId;
+
+    /**
      * 退款类型
      */
     private String rType;

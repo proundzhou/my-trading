@@ -15,5 +15,5 @@ public interface RefundOrderMapper {
 
     int updateByPrimaryKey(RefundOrder record);
 
-    List<RefundOrder> selectOrderByPrimaryKey(Integer rId);
+    List<RefundOrder> selectByUId(Integer uId);
 }

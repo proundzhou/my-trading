@@ -10,9 +10,13 @@ import java.util.Date;
 public class RefundOrderVo {
     private Integer rId;
 
+    private Integer gId;
+
     private Integer rMoney;
 
     private Date rCreateTime;
 
     private Byte moneyFlow;
+
+    private Byte rStatus;
 }

@@ -6,6 +6,7 @@
     <id column="r_id" jdbcType="INTEGER" property="rId" />
     <result column="u_id" jdbcType="INTEGER" property="uId" />
     <result column="o_id" jdbcType="INTEGER" property="oId" />
+    <result column="g_id" jdbcType="INTEGER" property="gId" />
     <result column="r_type" jdbcType="VARCHAR" property="rType" />
     <result column="r_reason" jdbcType="VARCHAR" property="rReason" />
     <result column="r_money" jdbcType="INTEGER" property="rMoney" />
@@ -18,8 +19,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    r_id, u_id, o_id, r_type, r_reason, r_money, r_explain, r_bank_card, r_img, r_status, 
-    r_create_time, money_flow
+    r_id, u_id, o_id, g_id, r_type, r_reason, r_money, r_explain, r_bank_card, r_img, 
+    r_status, r_create_time, money_flow
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -35,14 +36,16 @@
   </delete>
   <insert id="insert" keyColumn="r_id" keyProperty="rId" parameterType="com.zhou.refundaftersele.domain.entity.RefundOrder" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into refund_order (u_id, o_id, r_type, 
-      r_reason, r_money, r_explain, 
-      r_bank_card, r_img, r_status, 
-      r_create_time, money_flow)
-    values (#{uId,jdbcType=INTEGER}, #{oId,jdbcType=INTEGER}, #{rType,jdbcType=VARCHAR}, 
-      #{rReason,jdbcType=VARCHAR}, #{rMoney,jdbcType=INTEGER}, #{rExplain,jdbcType=LONGVARCHAR}, 
-      #{rBankCard,jdbcType=INTEGER}, #{rImg,jdbcType=VARCHAR}, #{rStatus,jdbcType=TINYINT}, 
-      #{rCreateTime,jdbcType=TIMESTAMP}, #{moneyFlow,jdbcType=TINYINT})
+    insert into refund_order (u_id, o_id, g_id, 
+      r_type, r_reason, r_money, 
+      r_explain, r_bank_card, r_img, 
+      r_status, r_create_time, money_flow
+      )
+    values (#{uId,jdbcType=INTEGER}, #{oId,jdbcType=INTEGER}, #{gId,jdbcType=INTEGER}, 
+      #{rType,jdbcType=VARCHAR}, #{rReason,jdbcType=VARCHAR}, #{rMoney,jdbcType=INTEGER}, 
+      #{rExplain,jdbcType=LONGVARCHAR}, #{rBankCard,jdbcType=INTEGER}, #{rImg,jdbcType=VARCHAR}, 
+      #{rStatus,jdbcType=TINYINT}, #{rCreateTime,jdbcType=TIMESTAMP}, #{moneyFlow,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="r_id" keyProperty="rId" parameterType="com.zhou.refundaftersele.domain.entity.RefundOrder" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -53,6 +56,9 @@
       </if>
       <if test="oId != null">
         o_id,
+      </if>
+      <if test="gId != null">
+        g_id,
       </if>
       <if test="rType != null">
         r_type,
@@ -88,6 +94,9 @@
       </if>
       <if test="oId != null">
         #{oId,jdbcType=INTEGER},
+      </if>
+      <if test="gId != null">
+        #{gId,jdbcType=INTEGER},
       </if>
       <if test="rType != null">
         #{rType,jdbcType=VARCHAR},
@@ -128,6 +137,9 @@
       <if test="oId != null">
         o_id = #{oId,jdbcType=INTEGER},
       </if>
+      <if test="gId != null">
+        g_id = #{gId,jdbcType=INTEGER},
+      </if>
       <if test="rType != null">
         r_type = #{rType,jdbcType=VARCHAR},
       </if>
@@ -163,6 +175,7 @@
     update refund_order
     set u_id = #{uId,jdbcType=INTEGER},
       o_id = #{oId,jdbcType=INTEGER},
+      g_id = #{gId,jdbcType=INTEGER},
       r_type = #{rType,jdbcType=VARCHAR},
       r_reason = #{rReason,jdbcType=VARCHAR},
       r_money = #{rMoney,jdbcType=INTEGER},
@@ -174,7 +187,8 @@
       money_flow = #{moneyFlow,jdbcType=TINYINT}
     where r_id = #{rId,jdbcType=INTEGER}
   </update>
-    <select id="selectOrderByPrimaryKey" resultMap="BaseResultMap">
 
+    <select id="selectByUId" resultMap="BaseResultMap">
+      select r_id,r_create_time,r_money,r_status from refund_order where u_id = #{uId};
     </select>
 </mapper>
