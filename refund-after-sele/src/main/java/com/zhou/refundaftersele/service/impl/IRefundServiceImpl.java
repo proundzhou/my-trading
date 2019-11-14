@@ -6,6 +6,7 @@ import com.zhou.goodmanagement.service.GoodService;
 import com.zhou.refundaftersele.domain.dto.AliBankInfo;
 import com.zhou.refundaftersele.domain.entity.RefundOrder;
 import com.zhou.refundaftersele.domain.vo.MoneyFlowVo;
+import com.zhou.refundaftersele.domain.vo.RefundOrderVo;
 import com.zhou.refundaftersele.mapper.RefundOrderMapper;
 import com.zhou.refundaftersele.service.IRefundService;
 import jdk.nashorn.internal.ir.CallNode;
@@ -32,6 +33,10 @@ public class IRefundServiceImpl implements IRefundService {
         MoneyFlowVo moneyFlowVo = new MoneyFlowVo();
         /*获取退款信息*/
         RefundOrder refundOrder = refundOrderMapper.selectByPrimaryKey(rId);
+        RefundOrderVo orderVo = new RefundOrderVo();
+
+        /*设置编号,时间，退款状态，金额*/
+        BeanUtils.copyProperties(refundOrder,orderVo);
 
         /*获取银行卡数据*/
         Integer rBankCard = refundOrder.getRBankCard();
@@ -43,10 +48,6 @@ public class IRefundServiceImpl implements IRefundService {
         }
         moneyFlowVo.setBank(bankInfo.getBank());
         moneyFlowVo.setRBankCard(rBankCard%10000);
-
-        /*设置时间状态*/
-        moneyFlowVo.setRCreateTime(refundOrder.getRCreateTime());
-        moneyFlowVo.setMoneyFlow(refundOrder.getMoneyFlow());
 
         /*假商品数据来源*/
         GoodService goodService = new GoodService();

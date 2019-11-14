@@ -10,18 +10,12 @@ import java.util.Date;
 @Data
 @Validated
 public class MoneyFlowVo {
-    private Integer rId;
+    private RefundOrderVo orderVo;
 
     private GoodsDto goods;
-
-    private Integer rMoney;
 
     private String bank;
 
     @Pattern(regexp = "[0-9]{4}")
     private Integer  rBankCard;
-
-    private Date rCreateTime;
-
-    private Byte moneyFlow;
 }
