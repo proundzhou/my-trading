@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wenqinghao.ordeform.mapper.OrderGoodsMapper">
-  <resultMap id="BaseResultMap" type="com.wenqinghao.ordeform.domain.entity.OrderGoods">
+<mapper namespace="com.wenqinghao.ordergoods.mapper.OrderGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.wenqinghao.ordergoods.domain.entity.OrderGoods">
     <!--@mbg.generated-->
     <!--@Table order_goods-->
     <result column="o_id" jdbcType="INTEGER" property="oId" />
     <result column="g_id" jdbcType="INTEGER" property="gId" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="o_spend" jdbcType="DOUBLE" property="OSpend"/>
   </resultMap>
 
   <!---->
   <select id="getListGoodsByOId" resultMap="BaseResultMap">
-    select g_id,quantity
+    select g_id,quantity,o_spend
     from order_goods
     where o_id = #{oId}
   </select>

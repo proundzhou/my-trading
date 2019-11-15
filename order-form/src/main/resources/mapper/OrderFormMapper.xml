@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wenqinghao.ordeform.mapper.OrderFormMapper">
-  <resultMap id="BaseResultMap" type="com.wenqinghao.ordeform.domain.entity.OrderForm">
+<mapper namespace="com.wenqinghao.orderform.mapper.OrderFormMapper">
+  <resultMap id="BaseResultMap" type="com.wenqinghao.orderform.domain.entity.OrderForm">
     <!--@mbg.generated-->
     <!--@Table order_form-->
     <id column="o_id" jdbcType="INTEGER" property="oId" />
@@ -20,10 +20,12 @@
     evaluate_status, is_delete
   </sql>
 
-  <!---->
+  <!-- 通过uId获取用户所有订单 -->
   <select id="getOrdersByUid" resultMap="BaseResultMap">
     select o.o_id,o.o_status,o.o_consignee_info,o.o_create_time,o.o_finsh_time,o.o_express_number,o.evaluate_status
     from order_form o
     where o.u_id = #{uId} and o.is_delete = 1;
   </select>
+
+  <!-- 通过oId删除订单(假删除) -->
 </mapper>

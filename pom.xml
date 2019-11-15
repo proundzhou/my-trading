@@ -15,6 +15,11 @@
     <name>my-trading</name>
     <description>Demo project for Spring Boot</description>
 
+    <modules>
+        <module>order-form</module>
+        <module>order-goods</module>
+        <module>good-management</module>
+    </modules>
     <properties>
         <java.version>1.8</java.version>
     </properties>
