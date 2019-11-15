@@ -1,6 +1,6 @@
 package com.zhou.refundaftersele.service.impl;
 
-import com.alibaba.fastjson.JSON;
+
 import com.alibaba.fastjson.JSONObject;
 import com.zhou.goodmanagement.domain.dto.GoodsDto;
 import com.zhou.goodmanagement.service.GoodService;
@@ -57,7 +57,7 @@ public class IRefundServiceImpl implements IRefundService {
         //String url = "https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo=";
         //String bankInfoJson = restTemplate.getForObject(url + rBankCard.toString(), String.class);
 
-
+        //向ali接口发送请求
         String bankInfoJson = null;
         URI uri = URI.create("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo="+rBankCard.toString());
         try {
@@ -76,17 +76,20 @@ public class IRefundServiceImpl implements IRefundService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*请求出错检测*/
         if(bankInfoJson==null){
             log.info("ali银行信息接口出错");
             return null;
         }
 
+        //解析返回的json字符串
         Object bankInfoObject = JSONObject.parse(bankInfoJson);
         AliBankInfo  bankInfo = new AliBankInfo();
         BeanUtils.copyProperties(bankInfoObject,bankInfo);
         if(bankInfo.getStat()!="ok" || !bankInfo.getValidated()){
             log.info("银行卡号出错");
         }
+        //写入银行卡号数据
         moneyFlowVo.setBank(bankInfo.getBank());
         moneyFlowVo.setRBankCard(rBankCard%10000);
 
