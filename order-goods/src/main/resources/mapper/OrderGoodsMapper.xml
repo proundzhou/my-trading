@@ -16,4 +16,7 @@
     from order_goods
     where o_id = #{oId}
   </select>
+  <select id="selectSpend" resultType="java.lang.Double">
+    select o_spend from order_goods where o_id = #{oId} and g_id=#{gId}
+  </select>
 </mapper>

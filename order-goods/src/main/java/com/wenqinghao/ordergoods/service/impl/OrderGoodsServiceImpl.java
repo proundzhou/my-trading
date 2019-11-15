@@ -29,4 +29,10 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
         }
         return orderGoodsVos;
     }
+
+    @Override
+    public Double getSpendByOIdAndGId(Integer oId, Integer gId) {
+        return orderGoodsMapper.selectSpend(oId,gId);
+
+    }
 }

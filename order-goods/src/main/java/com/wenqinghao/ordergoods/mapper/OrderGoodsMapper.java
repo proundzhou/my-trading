@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface OrderGoodsMapper {
     List<OrderGoods> getListGoodsByOId(@Param("oId") Integer oId);
+
+    Double selectSpend(@Param("oId")Integer oId, @Param("gId") Integer gId);
+
 }
