@@ -1,2 +1,5 @@
+### MVM ###
+.mvm
 .idea
-*.iml
+target
+my-trading.iml

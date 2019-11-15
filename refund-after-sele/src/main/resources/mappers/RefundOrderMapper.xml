@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.refundaftersele.mapper.RefundOrderMapper">
+  <resultMap id="BaseResultMap" type="com.zhou.refundaftersele.domain.entity.RefundOrder">
+    <!--@mbg.generated-->
+    <id column="r_id" jdbcType="INTEGER" property="rId" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+    <result column="o_id" jdbcType="INTEGER" property="oId" />
+    <result column="g_id" jdbcType="INTEGER" property="gId" />
+    <result column="r_type" jdbcType="VARCHAR" property="rType" />
+    <result column="r_reason" jdbcType="VARCHAR" property="rReason" />
+    <result column="r_money" jdbcType="INTEGER" property="rMoney" />
+    <result column="r_explain" jdbcType="LONGVARCHAR" property="rExplain" />
+    <result column="r_bank_card" jdbcType="INTEGER" property="rBankCard" />
+    <result column="r_img" jdbcType="VARCHAR" property="rImg" />
+    <result column="r_status" jdbcType="TINYINT" property="rStatus" />
+    <result column="r_create_time" jdbcType="TIMESTAMP" property="rCreateTime" />
+    <result column="money_flow" jdbcType="TINYINT" property="moneyFlow" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    r_id, u_id, o_id, g_id, r_type, r_reason, r_money, r_explain, r_bank_card, r_img, 
+    r_status, r_create_time, money_flow
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from refund_order
+    where r_id = #{rId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from refund_order
+    where r_id = #{rId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="r_id" keyProperty="rId" parameterType="com.zhou.refundaftersele.domain.entity.RefundOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into refund_order (u_id, o_id, g_id, 
+      r_type, r_reason, r_money, 
+      r_explain, r_bank_card, r_img, 
+      r_status, r_create_time, money_flow
+      )
+    values (#{uId,jdbcType=INTEGER}, #{oId,jdbcType=INTEGER}, #{gId,jdbcType=INTEGER}, 
+      #{rType,jdbcType=VARCHAR}, #{rReason,jdbcType=VARCHAR}, #{rMoney,jdbcType=INTEGER}, 
+      #{rExplain,jdbcType=LONGVARCHAR}, #{rBankCard,jdbcType=INTEGER}, #{rImg,jdbcType=VARCHAR}, 
+      #{rStatus,jdbcType=TINYINT}, #{rCreateTime,jdbcType=TIMESTAMP}, #{moneyFlow,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="r_id" keyProperty="rId" parameterType="com.zhou.refundaftersele.domain.entity.RefundOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into refund_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uId != null">
+        u_id,
+      </if>
+      <if test="oId != null">
+        o_id,
+      </if>
+      <if test="gId != null">
+        g_id,
+      </if>
+      <if test="rType != null">
+        r_type,
+      </if>
+      <if test="rReason != null">
+        r_reason,
+      </if>
+      <if test="rMoney != null">
+        r_money,
+      </if>
+      <if test="rExplain != null">
+        r_explain,
+      </if>
+      <if test="rBankCard != null">
+        r_bank_card,
+      </if>
+      <if test="rImg != null">
+        r_img,
+      </if>
+      <if test="rStatus != null">
+        r_status,
+      </if>
+      <if test="rCreateTime != null">
+        r_create_time,
+      </if>
+      <if test="moneyFlow != null">
+        money_flow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="oId != null">
+        #{oId,jdbcType=INTEGER},
+      </if>
+      <if test="gId != null">
+        #{gId,jdbcType=INTEGER},
+      </if>
+      <if test="rType != null">
+        #{rType,jdbcType=VARCHAR},
+      </if>
+      <if test="rReason != null">
+        #{rReason,jdbcType=VARCHAR},
+      </if>
+      <if test="rMoney != null">
+        #{rMoney,jdbcType=INTEGER},
+      </if>
+      <if test="rExplain != null">
+        #{rExplain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="rBankCard != null">
+        #{rBankCard,jdbcType=INTEGER},
+      </if>
+      <if test="rImg != null">
+        #{rImg,jdbcType=VARCHAR},
+      </if>
+      <if test="rStatus != null">
+        #{rStatus,jdbcType=TINYINT},
+      </if>
+      <if test="rCreateTime != null">
+        #{rCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moneyFlow != null">
+        #{moneyFlow,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhou.refundaftersele.domain.entity.RefundOrder">
+    <!--@mbg.generated-->
+    update refund_order
+    <set>
+      <if test="uId != null">
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="oId != null">
+        o_id = #{oId,jdbcType=INTEGER},
+      </if>
+      <if test="gId != null">
+        g_id = #{gId,jdbcType=INTEGER},
+      </if>
+      <if test="rType != null">
+        r_type = #{rType,jdbcType=VARCHAR},
+      </if>
+      <if test="rReason != null">
+        r_reason = #{rReason,jdbcType=VARCHAR},
+      </if>
+      <if test="rMoney != null">
+        r_money = #{rMoney,jdbcType=INTEGER},
+      </if>
+      <if test="rExplain != null">
+        r_explain = #{rExplain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="rBankCard != null">
+        r_bank_card = #{rBankCard,jdbcType=INTEGER},
+      </if>
+      <if test="rImg != null">
+        r_img = #{rImg,jdbcType=VARCHAR},
+      </if>
+      <if test="rStatus != null">
+        r_status = #{rStatus,jdbcType=TINYINT},
+      </if>
+      <if test="rCreateTime != null">
+        r_create_time = #{rCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moneyFlow != null">
+        money_flow = #{moneyFlow,jdbcType=TINYINT},
+      </if>
+    </set>
+    where r_id = #{rId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhou.refundaftersele.domain.entity.RefundOrder">
+    <!--@mbg.generated-->
+    update refund_order
+    set u_id = #{uId,jdbcType=INTEGER},
+      o_id = #{oId,jdbcType=INTEGER},
+      g_id = #{gId,jdbcType=INTEGER},
+      r_type = #{rType,jdbcType=VARCHAR},
+      r_reason = #{rReason,jdbcType=VARCHAR},
+      r_money = #{rMoney,jdbcType=INTEGER},
+      r_explain = #{rExplain,jdbcType=LONGVARCHAR},
+      r_bank_card = #{rBankCard,jdbcType=INTEGER},
+      r_img = #{rImg,jdbcType=VARCHAR},
+      r_status = #{rStatus,jdbcType=TINYINT},
+      r_create_time = #{rCreateTime,jdbcType=TIMESTAMP},
+      money_flow = #{moneyFlow,jdbcType=TINYINT}
+    where r_id = #{rId,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByUId" resultMap="BaseResultMap">
+      select r_id,r_create_time,r_money,r_status from refund_order where u_id = #{uId};
+    </select>
+</mapper>

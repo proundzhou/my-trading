@@ -1,0 +1,21 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: refund-after-sele
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/mytrading?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    dbcp2:
+      url: jdbc:mysql://127.0.0.1:3306/mytrading?useSSL=false&serverTimezone=UTC
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.97.253.89:8848
+mybatis:
+  mapper-locations: classpath:/mappers/**/*.xml
+
+
