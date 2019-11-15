@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wenqinghao.ordeform.mapper.OrderFormMapper">
+  <resultMap id="BaseResultMap" type="com.wenqinghao.ordeform.domain.entity.OrderForm">
+    <!--@mbg.generated-->
+    <!--@Table order_form-->
+    <id column="o_id" jdbcType="INTEGER" property="oId" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+    <result column="o_status" jdbcType="INTEGER" property="oStatus" />
+    <result column="o_consignee_info" jdbcType="VARCHAR" property="oConsigneeInfo" />
+    <result column="o_create_time" jdbcType="TIMESTAMP" property="oCreateTime" />
+    <result column="o_finsh_time" jdbcType="DATE" property="oFinshTime" />
+    <result column="o_express_number" jdbcType="INTEGER" property="oExpressNumber" />
+    <result column="evaluate_status" jdbcType="INTEGER" property="evaluateStatus" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    o_id, u_id, o_status, o_consignee_info, o_create_time, o_finsh_time, o_express_number, 
+    evaluate_status, is_delete
+  </sql>
+
+  <!---->
+  <select id="getOrdersByUid" resultMap="BaseResultMap">
+    select o.o_id,o.o_status,o.o_consignee_info,o.o_create_time,o.o_finsh_time,o.o_express_number,o.evaluate_status
+    from order_form o
+    where o.u_id = #{uId} and o.is_delete = 1;
+  </select>
+</mapper>
