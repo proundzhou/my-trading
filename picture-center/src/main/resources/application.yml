@@ -1,0 +1,20 @@
+server:
+  port: 8888
+spring:
+  application:
+    name:  wqh-pic-center
+  profiles:
+    active: dev
+  servlet:
+    # ========文件上传的配置信息===========
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 15MB
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 112.74.42.138:8848
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+
+
