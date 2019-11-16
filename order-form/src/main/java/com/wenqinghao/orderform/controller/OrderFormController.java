@@ -1,7 +1,6 @@
 package com.wenqinghao.orderform.controller;
 
 import com.wenqinghao.orderform.domain.dto.OrderFormDto;
-import com.wenqinghao.orderform.domain.entity.OrderForm;
 import com.wenqinghao.orderform.domain.vo.OrderAndGoodsVo;
 import com.wenqinghao.orderform.service.OrderFormService;
 import org.springframework.web.bind.annotation.PathVariable;

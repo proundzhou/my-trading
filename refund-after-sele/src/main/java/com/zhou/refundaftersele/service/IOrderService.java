@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient("order-management")
+@FeignClient("order-goods")
 public interface IOrderService {
 
-    @RequestMapping(value = "/order/orderDetailInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/orderGoods/spend",method = RequestMethod.POST)
     Double getSpend(@RequestBody OrderMapDto orderMapDto);
 
 }

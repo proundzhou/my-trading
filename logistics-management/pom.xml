@@ -5,6 +5,7 @@
     <groupId>com.example</groupId>
     <artifactId>logistics-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>logistics-management</name>
     <description>Demo project for Spring Boot</description>
 
@@ -32,6 +33,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
             </plugin>
         </plugins>
     </build>

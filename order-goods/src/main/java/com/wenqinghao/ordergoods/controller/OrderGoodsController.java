@@ -29,12 +29,12 @@ public class OrderGoodsController {
      * @Param:[orderGoodsDto]
      * @Return:java.lang.Double
      */
-    @RequestMapping
-    public Double getSpend(OrderGoodsDto orderGoodsDto) {
+    @RequestMapping(value = "/spend",method = RequestMethod.POST)
+    public Double getSpend(@RequestBody OrderGoodsDto orderGoodsDto) {
         return orderGoodsService.getSpendByOIdAndGId(orderGoodsDto.getOId(),orderGoodsDto.getGId());
     }
 
-    @RequestMapping(value="/orderGoods/addOrderGoods",method = RequestMethod.POST)
+    @RequestMapping(value="/addOrderGoods",method = RequestMethod.POST)
     String addOrderGoods(@RequestBody List<OrderGoodsDto> goods){
         return orderGoodsService.addOrderGoods(goods);
     }

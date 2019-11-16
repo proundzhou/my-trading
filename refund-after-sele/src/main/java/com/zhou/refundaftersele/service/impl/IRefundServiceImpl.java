@@ -38,9 +38,6 @@ public class IRefundServiceImpl implements IRefundService {
     @Resource
     IOrderService orderService;
 
-    @Resource
-    private RestTemplate restTemplate;
-
     @Override
     public MoneyFlowVo getMoneyFlowByRId(Integer rId) {
         MoneyFlowVo moneyFlowVo = new MoneyFlowVo();
