@@ -6,11 +6,13 @@ import com.zhou.goodmanagement.domain.dto.GoodsDto;
 import com.zhou.goodmanagement.service.GoodService;
 import com.zhou.refundaftersele.domain.dto.AliBankInfo;
 import com.zhou.refundaftersele.domain.dto.OrderMapDto;
+import com.zhou.refundaftersele.domain.dto.RefundDto;
 import com.zhou.refundaftersele.domain.entity.RefundOrder;
 import com.zhou.refundaftersele.domain.vo.MoneyFlowVo;
+import com.zhou.refundaftersele.domain.vo.RefundDetailVo;
 import com.zhou.refundaftersele.domain.vo.RefundInfoVo;
-import com.zhou.refundaftersele.domain.vo.RefundOrderVo;
 import com.zhou.refundaftersele.mapper.RefundOrderMapper;
+import com.zhou.refundaftersele.service.IFileUploadService;
 import com.zhou.refundaftersele.service.IOrderService;
 import com.zhou.refundaftersele.service.IRefundService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
@@ -39,7 +42,7 @@ public class IRefundServiceImpl implements IRefundService {
     IOrderService orderService;
 
     @Resource
-    private RestTemplate restTemplate;
+    IFileUploadService fileUploadService;
 
     @Override
     public MoneyFlowVo getMoneyFlowByRId(Integer rId) {
@@ -47,7 +50,7 @@ public class IRefundServiceImpl implements IRefundService {
         /*获取退款信息*/
         RefundOrder refundOrder = refundOrderMapper.selectByPrimaryKey(rId);
         log.info(refundOrder.toString());
-        RefundOrderVo orderVo = new RefundOrderVo();
+        RefundDetailVo orderVo = new RefundDetailVo();
 
         /*设置编号,时间，退款状态，金额,*/
         BeanUtils.copyProperties(refundOrder,orderVo);
@@ -111,13 +114,13 @@ public class IRefundServiceImpl implements IRefundService {
         /*假商品数据来源*/
         GoodService goodService = new GoodService();
 
-        for (RefundOrder refund:refundOrders) {
+        for (RefundOrder order:refundOrders) {
             RefundInfoVo refundInfoVo = new RefundInfoVo();
-            RefundOrderVo refundOrderVo = new RefundOrderVo();
+            RefundDetailVo refundDetailVo = new RefundDetailVo();
 
             //获取退款业务信息
-            BeanUtils.copyProperties(refund,refundOrderVo);
-            refundInfoVo.setRefundOrderVo(refundOrderVo);
+            BeanUtils.copyProperties(order,refundDetailVo);
+            refundInfoVo.setRefundDetailVo(refundDetailVo);
 
             //获取退款商品信息
             //GoodsDto goodstrue = goodService.getGoods(refundOrder.getGId());
@@ -125,7 +128,7 @@ public class IRefundServiceImpl implements IRefundService {
             refundInfoVo.setGoodsDto(goods);
 
             //获取退款项购买信息,调用服务输入订单id，商品Id，返回订单金额
-            Double spend = orderService.getSpend(new OrderMapDto(refund.getOId(),refund.getGId()));
+            Double spend = orderService.getSpend(new OrderMapDto(order.getOId(),order.getGId()));
             refundInfoVo.setSpend(spend);
 
             //添加进列表
@@ -133,5 +136,27 @@ public class IRefundServiceImpl implements IRefundService {
         }
 
         return RefundInfoVos;
+    }
+
+    @Override
+    public String addRefundRecord(MultipartFile[] files, RefundDto refundDto) {
+
+        RefundOrder refundOrder = new RefundOrder();
+        //生成分布式ID（仅作演示用）
+        long timeMillis = System.currentTimeMillis();
+        refundOrder.setRId((int)timeMillis);
+        //记录退款信息
+        BeanUtils.copyProperties(refundDto,refundOrder);
+        //存储退款凭证图片，记录图片路径
+        String path = fileUploadService.ImgUpload(files);
+        refundOrder.setRImg(path);
+        //银行卡号不知从何而来
+        //插入记录
+        Integer insert = refundOrderMapper.insert(refundOrder);
+        if(insert>0){
+            //向商户端发送退款消息
+            return "success";
+        }
+        return "failed";
     }
 }

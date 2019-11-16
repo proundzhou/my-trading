@@ -1,12 +1,14 @@
 package com.zhou.refundaftersele.domain.vo;
 
+
+
 import com.zhou.goodmanagement.domain.dto.GoodsDto;
 import lombok.Data;
 
 @Data
 public class RefundInfoVo {
 
-    private RefundOrderVo refundOrderVo;
+    private RefundDetailVo refundDetailVo;
 
     private GoodsDto goodsDto;
 
