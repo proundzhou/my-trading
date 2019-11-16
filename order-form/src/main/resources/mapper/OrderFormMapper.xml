@@ -26,6 +26,11 @@
     from order_form o
     where o.u_id = #{uId} and o.is_delete = 1;
   </select>
-
   <!-- 通过oId删除订单(假删除) -->
+  <delete id="deleteOrdersByOid"></delete>
+
+  <!--插入新订单-->
+  <insert id="insertOrder" keyProperty="orderForm.oId" useGeneratedKeys="true">
+    insert into order_form(u_id, o_spend ,o_consignee_info) values (#{orderForm.UId},#{orderForm.OSpend},#{orderForm.OConsigneeInfo})
+  </insert>
 </mapper>

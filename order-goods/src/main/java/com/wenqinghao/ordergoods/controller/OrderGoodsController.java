@@ -1,11 +1,10 @@
 package com.wenqinghao.ordergoods.controller;
 
 
+import com.wenqinghao.ordergoods.domain.dto.OrderGoodsDto;
 import com.wenqinghao.ordergoods.domain.vo.OrderGoodsVo;
 import com.wenqinghao.ordergoods.service.OrderGoodsService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,7 +30,12 @@ public class OrderGoodsController {
      * @Return:java.lang.Double
      */
     @RequestMapping
-    public Double getSpend(com.wenqinghao.ordeform.domain.dto.OrderGoodsDto orderGoodsDto) {
+    public Double getSpend(OrderGoodsDto orderGoodsDto) {
         return orderGoodsService.getSpendByOIdAndGId(orderGoodsDto.getOId(),orderGoodsDto.getGId());
+    }
+
+    @RequestMapping(value="/orderGoods/addOrderGoods",method = RequestMethod.POST)
+    String addOrderGoods(@RequestBody List<OrderGoodsDto> goods){
+        return orderGoodsService.addOrderGoods(goods);
     }
 }

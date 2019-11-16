@@ -1,6 +1,7 @@
 package com.wenqinghao.ordergoods.service;
 
 
+import com.wenqinghao.ordergoods.domain.dto.OrderGoodsDto;
 import com.wenqinghao.ordergoods.domain.vo.OrderGoodsVo;
 
 import java.util.List;
@@ -10,5 +11,6 @@ public interface OrderGoodsService {
 
     Double getSpendByOIdAndGId(Integer oId, Integer gId);
 
+    String addOrderGoods(List<OrderGoodsDto> goods);
 }
 

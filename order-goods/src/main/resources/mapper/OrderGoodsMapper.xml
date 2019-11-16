@@ -9,6 +9,9 @@
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
     <result column="o_spend" jdbcType="DOUBLE" property="OSpend"/>
   </resultMap>
+  <sql id="Base_Column_List">
+    o_id,g_id,quantity,o_spend
+  </sql>
 
   <!---->
   <select id="getListGoodsByOId" resultMap="BaseResultMap">
@@ -19,4 +22,13 @@
   <select id="selectSpend" resultType="java.lang.Double">
     select o_spend from order_goods where o_id = #{oId} and g_id=#{gId}
   </select>
+  <insert id="insertOrderGoods">
+    <!--insert into -->
+    <foreach collection="list" item="og" >
+      insert into order_goods(<include refid="Base_Column_List"></include>)
+      values(#{og.OId},#{og.GId},#{og.quantity},#{og.OSpend});
+    </foreach>
+  </insert>
+
+
 </mapper>

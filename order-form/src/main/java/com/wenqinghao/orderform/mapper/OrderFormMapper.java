@@ -14,4 +14,7 @@ public interface OrderFormMapper {
     //通过订单oId删除订单(假删除)
 
     Integer deleteOrdersByOid(Integer oId);
+
+
+    Integer insertOrder(@Param("orderForm") OrderForm orderForm);
 }

@@ -1,5 +1,11 @@
-### MVM ###
-.mvm
+
 .idea
-target
+./target
+
 my-trading.iml
+./*.iml
+
+### MVM ###
+./.mvm
+./mvnw
+./mvnw.cmd

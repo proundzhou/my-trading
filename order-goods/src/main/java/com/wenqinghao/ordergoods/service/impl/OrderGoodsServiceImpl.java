@@ -1,5 +1,6 @@
 package com.wenqinghao.ordergoods.service.impl;
 
+import com.wenqinghao.ordergoods.domain.dto.OrderGoodsDto;
 import com.wenqinghao.ordergoods.domain.entity.OrderGoods;
 import com.wenqinghao.ordergoods.domain.vo.OrderGoodsVo;
 
@@ -33,6 +34,14 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
     @Override
     public Double getSpendByOIdAndGId(Integer oId, Integer gId) {
         return orderGoodsMapper.selectSpend(oId,gId);
+    }
 
+    @Override
+    public String addOrderGoods(List<OrderGoodsDto> goods) {
+        Integer count = orderGoodsMapper.insertOrderGoods(goods);
+        if(count>0){
+            return "success";
+        }
+        return "failed";
     }
 }

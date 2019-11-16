@@ -1,20 +1,29 @@
 package com.wenqinghao.orderform.service.impl;
 
+import com.sun.jmx.snmp.Timestamp;
+import com.wenqinghao.orderform.domain.dto.OrderFormDto;
+import com.wenqinghao.orderform.domain.dto.OrderGoodsDto;
 import com.wenqinghao.orderform.domain.entity.OrderForm;
 import com.wenqinghao.orderform.domain.vo.OrderAndGoodsVo;
 import com.wenqinghao.orderform.domain.vo.OrderGoodsVo;
 import com.wenqinghao.orderform.mapper.OrderFormMapper;
+import com.wenqinghao.orderform.service.IGoodService;
 import com.wenqinghao.orderform.service.OrderFormService;
 import com.wenqinghao.orderform.service.OrderGoodsService;
+import com.wenqinghao.ordergoods.domain.entity.OrderGoods;
 import com.zhou.goodmanagement.domain.dto.GoodsDto;
 import com.zhou.goodmanagement.service.GoodService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.language.bm.Lang;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderFormService {
 
@@ -23,6 +32,9 @@ public class OrderServiceImpl implements OrderFormService {
 
     @Resource
     OrderGoodsService orderGoodsService;
+
+    @Resource
+    IGoodService goodService;
 
     @Override
     public List<OrderAndGoodsVo> getOrdersByUid(Integer uId) {
@@ -43,5 +55,38 @@ public class OrderServiceImpl implements OrderFormService {
             orderAndGoodsVos.add(orderAndGoodsVo);
         }
         return orderAndGoodsVos;
+    }
+
+
+    @Override
+    public Integer newOrder(OrderFormDto orderFormDto) {
+        /*===============分布式事务=============*/
+        //分布式生成唯一订单号
+        long Id = System.currentTimeMillis();
+        /*大转小，数据丢失，仅作演示*/
+        Integer oId = (int) Id;
+
+        //提取商品情况
+        List<OrderGoodsDto> goods = orderFormDto.getGoods();
+        //调用商品服务检查商品是否有库存，修改商品信息，使用事务，一次改多行商品库存记录
+        String result1 = goodService.reduceGoods(goods);
+        //生成关联表
+        for (OrderGoodsDto orderGoods : goods
+             ) {
+            orderGoods.setOId(oId);
+        }
+        String result2 = orderGoodsService.addOrderGoods(goods);
+        //假设商品库存有，建立订单
+        OrderForm orderForm = new OrderForm();
+        orderForm.setOId(oId);
+        orderForm.setUId(orderFormDto.getUId());
+        orderForm.setOSpend(orderFormDto.getOSpend());
+        orderForm.setOConsigneeInfo(orderFormDto.getOConsigneeInfo());
+        Integer count = orderFormMapper.insertOrder(orderForm);
+        if(count>0){
+            log.info("订单生成成功");
+        }
+        
+        return oId;
     }
 }

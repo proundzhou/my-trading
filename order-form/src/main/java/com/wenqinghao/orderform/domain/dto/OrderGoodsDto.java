@@ -1,9 +1,12 @@
-package com.wenqinghao.ordergoods.domain.dto;
+package com.wenqinghao.orderform.domain.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
 @Data
-public class OrderGoodsDto {
+public class OrderGoodsDto implements Serializable {
+
     /**
      * 订单id
      */
@@ -23,4 +26,6 @@ public class OrderGoodsDto {
      * 总计金额
      */
     private double oSpend;
+
+
 }
