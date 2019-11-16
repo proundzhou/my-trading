@@ -4,8 +4,13 @@ server:
     context-path: /
 
 spring:
+  application:
+    name:  wqh-evaluate-center
   profiles:
     active: dev
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.97.253.89:8848
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml
