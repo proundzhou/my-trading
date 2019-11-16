@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqh.project.picturecenter.mapper.PictureMapper">
+  <resultMap id="BaseResultMap" type="com.wqh.project.picturecenter.domain.entity.Picture">
+    <!--@mbg.generated-->
+    <id column="p_id" jdbcType="INTEGER" property="pId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    p_id, url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from picture
+    where p_id = #{pId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from picture
+    where p_id = #{pId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="p_id" keyProperty="pId" parameterType="com.wqh.project.picturecenter.domain.entity.Picture" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into picture (url)
+    values (#{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="p_id" keyProperty="pId" parameterType="com.wqh.project.picturecenter.domain.entity.Picture" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wqh.project.picturecenter.domain.entity.Picture">
+    <!--@mbg.generated-->
+    update picture
+    <set>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wqh.project.picturecenter.domain.entity.Picture">
+    <!--@mbg.generated-->
+    update picture
+    set url = #{url,jdbcType=VARCHAR}
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+</mapper>
