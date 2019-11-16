@@ -19,9 +19,9 @@ public class Evaluate {
 
     private String eImg;
 
-    private Byte eType;
+    private int eType;
 
     private Date eCreateTime;
 
-    private Byte isDelete;
+    private int isDelete;
 }

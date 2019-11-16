@@ -77,12 +77,12 @@
         </dependency>
 
 
-        <!--自动装配异常处理-->
+        <!--自动装配异常处理
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency>-->
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>

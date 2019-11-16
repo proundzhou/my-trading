@@ -24,6 +24,7 @@ public class UploadUtils {
     private String ImagePath="\\imgs";
     private String RootPath="D:\\JAVA\\pic";
     private String prefixImg="IMG_";
+    private int a=1;
 
     public String getImageRootPath() {
         return ImagePath + File.separator + DateFormatUtils.format(new Date(), "yyyyMMdd");
@@ -33,11 +34,11 @@ public class UploadUtils {
         //  .png  或者.jpg
         String suffixName = oldFileName.substring(oldFileName.indexOf("."));
         //IMG_201910311717.png
-        return prefix + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + suffixName;
+        return prefix + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss")+ "_"+ ++a + suffixName;
     }
 
     public String saveImageFile(MultipartFile[] files) throws IOException {
-        List<String> strings = new ArrayList();
+        String save = new String();
         for (MultipartFile multipartFile:files) {
             String imageRootName = getImageRootPath();
             String fileName = getFileName(prefixImg, multipartFile.getOriginalFilename());
@@ -49,8 +50,9 @@ public class UploadUtils {
             FileUtils.touch(file);
             // 保存到服务器
             FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), file);
-            strings.add(imageFile);
+            save = save + imageFile + ",";
         }
-        return strings.toString();
+        a = 1;
+        return save.substring(0,save.length()-1);
     }
 }
