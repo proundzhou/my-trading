@@ -9,6 +9,11 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
+        <!--源码编码格式-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--编译编码格式-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--java版本-->
         <java.version>1.8</java.version>
     </properties>
 

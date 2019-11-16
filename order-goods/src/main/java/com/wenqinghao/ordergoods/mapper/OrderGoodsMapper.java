@@ -11,5 +11,5 @@ public interface OrderGoodsMapper {
 
     Double selectSpend(@Param("oId")Integer oId, @Param("gId") Integer gId);
 
-    Integer insertOrderGoods(List<OrderGoodsDto> goods);
+    Integer insertOrderGoods(@Param("goods") List<OrderGoodsDto> goods);
 }

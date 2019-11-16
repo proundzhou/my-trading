@@ -19,6 +19,9 @@
         <module>order-form</module>
         <module>order-goods</module>
         <module>good-management</module>
+        <module>refund-after-sele</module>
+        <module>evaluate</module>
+        <module>picture-center</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

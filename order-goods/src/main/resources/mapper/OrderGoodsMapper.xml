@@ -24,7 +24,7 @@
   </select>
   <insert id="insertOrderGoods">
     <!--insert into -->
-    <foreach collection="list" item="og" >
+    <foreach collection="goods" item="og" >
       insert into order_goods(<include refid="Base_Column_List"></include>)
       values(#{og.OId},#{og.GId},#{og.quantity},#{og.OSpend});
     </foreach>
