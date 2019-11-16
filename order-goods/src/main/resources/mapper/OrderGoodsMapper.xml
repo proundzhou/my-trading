@@ -15,9 +15,9 @@
 
   <!---->
   <select id="getListGoodsByOId" resultMap="BaseResultMap">
-    select g_id,quantity,o_spend
-    from order_goods
-    where o_id = #{oId}
+    select g.g_id,g.quantity,g.o_spend
+    from order_goods g
+    where g.o_id = #{oId}
   </select>
   <select id="selectSpend" resultType="java.lang.Double">
     select o_spend from order_goods where o_id = #{oId} and g_id=#{gId}

@@ -22,5 +22,5 @@ public class OrderGoods {
     /**
      * 总计金额
      */
-    private double oSpend;
+    private double OSpend;
 }

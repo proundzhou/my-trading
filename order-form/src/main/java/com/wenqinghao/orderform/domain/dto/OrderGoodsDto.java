@@ -25,7 +25,7 @@ public class OrderGoodsDto implements Serializable {
     /**
      * 总计金额
      */
-    private double oSpend;
+    private Double OSpend;
 
 
 }

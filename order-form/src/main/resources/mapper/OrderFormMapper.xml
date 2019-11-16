@@ -12,25 +12,58 @@
     <result column="o_finsh_time" jdbcType="DATE" property="oFinshTime" />
     <result column="o_express_number" jdbcType="INTEGER" property="oExpressNumber" />
     <result column="evaluate_status" jdbcType="INTEGER" property="evaluateStatus" />
+    <result column="o_spend" jdbcType="DOUBLE" property="oSpend"/>
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     o_id, u_id, o_status, o_consignee_info, o_create_time, o_finsh_time, o_express_number, 
-    evaluate_status, is_delete
+    evaluate_status, o_spend,is_delete
   </sql>
 
   <!-- 通过uId获取用户所有订单 -->
   <select id="getOrdersByUid" resultMap="BaseResultMap">
-    select o.o_id,o.o_status,o.o_consignee_info,o.o_create_time,o.o_finsh_time,o.o_express_number,o.evaluate_status
+    select o.o_id,o.o_status,o.o_consignee_info,o.o_create_time,o.o_finsh_time,o.o_express_number,o.evaluate_status,o.o_spend
     from order_form o
-    where o.u_id = #{uId} and o.is_delete = 1;
+    where o.u_id = #{uId} and o.is_delete = 1
   </select>
   <!-- 通过oId删除订单(假删除) -->
-  <delete id="deleteOrdersByOid"></delete>
+  <update id="deleteOrdersByOid">
+    update order_form
+    set is_delete = 0
+    where o_id = #{oId}
+  </update>
 
   <!--插入新订单-->
   <insert id="insertOrder" keyProperty="orderForm.oId" useGeneratedKeys="true">
     insert into order_form(u_id, o_spend ,o_consignee_info) values (#{orderForm.UId},#{orderForm.OSpend},#{orderForm.OConsigneeInfo})
   </insert>
+
+  <!--通过用户uId,oStatus订单状态查询订单-->
+  <select id="getOrdersByUidAndByoStatus" resultMap="BaseResultMap">
+    select o.o_id,o.o_consignee_info,o.o_create_time,o.o_finsh_time,o.o_express_number,o.evaluate_status,o.o_spend
+    from order_form o
+    where o.u_id = #{uId} and o.is_delete = 1 and o.o_status = #{oStatus}
+  </select>
+
+  <!--通过用户uId,evaluateStatus订单状态查询订单-->
+  <select id="getOrdersByUidAndByEvaluateStatus" resultMap="BaseResultMap">
+    select o.o_id,o.o_consignee_info,o.o_create_time,o.o_finsh_time,o.o_express_number,o.evaluate_status,o.o_spend
+    from order_form o
+    where o.u_id = #{uId} and o.is_delete = 1 and o.evaluate_status = 0
+  </select>
+  
+  <!--通过订单oId修改订单状态-->
+  <update id="updateoStatusByOId">
+    update order_form
+    set o_status =  #{oStatus}
+    where o_id = #{oId}
+  </update>
+
+  <!--通过订单oId修改评论状态-->
+  <update id="updateEvaluateStatusByOId">
+    update order_form
+    set evaluate_status = 1
+    where o_id = #{oId}
+  </update>
 </mapper>

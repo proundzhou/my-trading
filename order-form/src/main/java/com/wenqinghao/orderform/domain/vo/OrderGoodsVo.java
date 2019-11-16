@@ -9,6 +9,6 @@ import java.io.Serializable;
 public class OrderGoodsVo implements Serializable {
     private Integer gId;
     private Integer quantity;
-    private double oSpend;
+    private Double OSpend;
     private GoodsDto goodsDto;
 }

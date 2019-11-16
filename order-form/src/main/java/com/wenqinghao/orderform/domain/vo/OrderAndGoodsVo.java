@@ -14,4 +14,5 @@ public class OrderAndGoodsVo implements Serializable {
     private String oConsigneeInfo;
     private Date oCreateTime;
     private List<OrderGoodsVo> list;
+    private Double oSpend;
 }
