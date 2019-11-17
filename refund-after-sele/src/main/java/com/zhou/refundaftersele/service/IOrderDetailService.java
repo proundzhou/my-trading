@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient("order-goods")
-public interface IOrderService {
+public interface IOrderDetailService {
 
     @RequestMapping(value = "/orderGoods/spend",method = RequestMethod.POST)
     Double getSpend(@RequestBody OrderMapDto orderMapDto);

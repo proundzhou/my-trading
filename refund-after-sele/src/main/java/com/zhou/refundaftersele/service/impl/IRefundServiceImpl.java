@@ -6,18 +6,20 @@ import com.zhou.goodmanagement.domain.dto.GoodsDto;
 import com.zhou.goodmanagement.service.GoodService;
 import com.zhou.refundaftersele.domain.dto.AliBankInfo;
 import com.zhou.refundaftersele.domain.dto.OrderMapDto;
+import com.zhou.refundaftersele.domain.dto.RefundDto;
 import com.zhou.refundaftersele.domain.entity.RefundOrder;
 import com.zhou.refundaftersele.domain.vo.MoneyFlowVo;
 import com.zhou.refundaftersele.domain.vo.RefundInfoVo;
 import com.zhou.refundaftersele.domain.vo.RefundOrderVo;
 import com.zhou.refundaftersele.mapper.RefundOrderMapper;
-import com.zhou.refundaftersele.service.IOrderService;
+import com.zhou.refundaftersele.service.IFileUploadService;
+import com.zhou.refundaftersele.service.IOrderDetailService;
 import com.zhou.refundaftersele.service.IRefundService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
@@ -36,7 +38,10 @@ public class IRefundServiceImpl implements IRefundService {
     RefundOrderMapper refundOrderMapper;
 
     @Resource
-    IOrderService orderService;
+    IFileUploadService fileUploadService;
+
+    @Resource
+    IOrderDetailService orderDetailService;
 
     @Override
     public MoneyFlowVo getMoneyFlowByRId(Integer rId) {
@@ -47,16 +52,14 @@ public class IRefundServiceImpl implements IRefundService {
         RefundOrderVo orderVo = new RefundOrderVo();
 
         /*设置编号,时间，退款状态，金额,*/
-        BeanUtils.copyProperties(refundOrder,orderVo);
+        BeanUtils.copyProperties(refundOrder, orderVo);
 
         /*获取银行卡数据*/
         Integer rBankCard = refundOrder.getRBankCard();
-        //String url = "https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo=";
-        //String bankInfoJson = restTemplate.getForObject(url + rBankCard.toString(), String.class);
 
         //向ali接口发送请求
         String bankInfoJson = null;
-        URI uri = URI.create("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo="+rBankCard.toString());
+        URI uri = URI.create("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo=" + rBankCard.toString());
         try {
             URL url = uri.toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -74,21 +77,21 @@ public class IRefundServiceImpl implements IRefundService {
             e.printStackTrace();
         }
         /*请求出错检测*/
-        if(bankInfoJson==null){
+        if (bankInfoJson == null) {
             log.info("ali银行信息接口出错");
             return null;
         }
 
         //解析返回的json字符串
         Object bankInfoObject = JSONObject.parse(bankInfoJson);
-        AliBankInfo  bankInfo = new AliBankInfo();
-        BeanUtils.copyProperties(bankInfoObject,bankInfo);
-        if(bankInfo.getStat()!="ok" || !bankInfo.getValidated()){
+        AliBankInfo bankInfo = new AliBankInfo();
+        BeanUtils.copyProperties(bankInfoObject, bankInfo);
+        if (bankInfo.getStat() != "ok" || !bankInfo.getValidated()) {
             log.info("银行卡号出错");
         }
         //写入银行卡号数据
         moneyFlowVo.setBank(bankInfo.getBank());
-        moneyFlowVo.setRBankCard(rBankCard%10000);
+        moneyFlowVo.setRBankCard(rBankCard % 10000);
 
         /*假商品数据来源*/
         GoodService goodService = new GoodService();
@@ -108,12 +111,12 @@ public class IRefundServiceImpl implements IRefundService {
         /*假商品数据来源*/
         GoodService goodService = new GoodService();
 
-        for (RefundOrder refund:refundOrders) {
+        for (RefundOrder refund : refundOrders) {
             RefundInfoVo refundInfoVo = new RefundInfoVo();
             RefundOrderVo refundOrderVo = new RefundOrderVo();
 
             //获取退款业务信息
-            BeanUtils.copyProperties(refund,refundOrderVo);
+            BeanUtils.copyProperties(refund, refundOrderVo);
             refundInfoVo.setRefundOrderVo(refundOrderVo);
 
             //获取退款商品信息
@@ -122,7 +125,7 @@ public class IRefundServiceImpl implements IRefundService {
             refundInfoVo.setGoodsDto(goods);
 
             //获取退款项购买信息,调用服务输入订单id，商品Id，返回订单金额
-            Double spend = orderService.getSpend(new OrderMapDto(refund.getOId(),refund.getGId()));
+            Double spend = orderDetailService.getSpend(new OrderMapDto(refund.getOId(), refund.getGId()));
             refundInfoVo.setSpend(spend);
 
             //添加进列表
@@ -130,5 +133,27 @@ public class IRefundServiceImpl implements IRefundService {
         }
 
         return RefundInfoVos;
+    }
+
+    @Override
+    public String addRefundRecord(MultipartFile[] files, RefundDto refundDto) {
+
+        RefundOrder refundOrder = new RefundOrder();
+        //生成分布式ID（仅作演示用）
+        long timeMillis = System.currentTimeMillis();
+        refundOrder.setRId((int) timeMillis);
+        //记录退款信息
+        BeanUtils.copyProperties(refundDto, refundOrder);
+        //存储退款凭证图片，记录图片路径
+        String path = fileUploadService.ImgUpload(files);
+        refundOrder.setRImg(path);
+        //银行卡号不知从何而来
+        //插入记录
+        Integer insert = refundOrderMapper.insert(refundOrder);
+        if (insert > 0) {
+            //向商户端发送退款消息
+            return "success";
+        }
+        return "failed";
     }
 }

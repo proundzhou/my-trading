@@ -3,8 +3,12 @@ server:
 spring:
   application:
     name:  wqh-pic-center
-  profiles:
-    active: dev
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/comment?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
   servlet:
     # ========文件上传的配置信息===========
     multipart:
