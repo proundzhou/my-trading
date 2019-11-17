@@ -1,14 +1,14 @@
 package com.wqh.project.picturecenter.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
+import com.wqh.project.picturecenter.domain.dto.RefundDto;
 import com.wqh.project.picturecenter.service.IPictureService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author wen
@@ -18,6 +18,13 @@ import java.io.IOException;
 public class FileController {
     @Resource
     IPictureService pictureService;
+
+    @RequestMapping(value = "/uploadFile",method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    String ImgUpload(@RequestBody Map<String,Object> data){
+        MultipartFile[] files = (MultipartFile[])data.get("files");
+        RefundDto refundDto = (RefundDto)data.get("refundDto");
+        return pictureService.saveImg(files,refundDto);
+    }
 
     @RequestMapping("test")
     public String test(@RequestParam MultipartFile[] files) throws IOException {

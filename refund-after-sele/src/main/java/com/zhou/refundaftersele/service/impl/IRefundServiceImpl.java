@@ -28,7 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -46,17 +48,20 @@ public class IRefundServiceImpl implements IRefundService {
     @Override
     public MoneyFlowVo getMoneyFlowByRId(Integer rId) {
         MoneyFlowVo moneyFlowVo = new MoneyFlowVo();
+
         /*获取退款信息*/
         RefundOrder refundOrder = refundOrderMapper.selectByPrimaryKey(rId);
         log.info(refundOrder.toString());
-        RefundOrderVo orderVo = new RefundOrderVo();
+
 
         /*设置编号,时间，退款状态，金额,*/
+        RefundOrderVo orderVo = new RefundOrderVo();
         BeanUtils.copyProperties(refundOrder, orderVo);
+        log.info(orderVo.toString());
+        moneyFlowVo.setOrderVo(orderVo);
 
         /*获取银行卡数据*/
         Integer rBankCard = refundOrder.getRBankCard();
-
         //向ali接口发送请求
         String bankInfoJson = null;
         URI uri = URI.create("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?cardBinCheck=true&cardNo=" + rBankCard.toString());
@@ -76,6 +81,7 @@ public class IRefundServiceImpl implements IRefundService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         /*请求出错检测*/
         if (bankInfoJson == null) {
             log.info("ali银行信息接口出错");
@@ -145,7 +151,11 @@ public class IRefundServiceImpl implements IRefundService {
         //记录退款信息
         BeanUtils.copyProperties(refundDto, refundOrder);
         //存储退款凭证图片，记录图片路径
-        String path = fileUploadService.ImgUpload(files);
+
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("files",files);
+        data.put("refundDto",refundDto);
+        String path = fileUploadService.ImgUpload(data);
         refundOrder.setRImg(path);
         //银行卡号不知从何而来
         //插入记录
