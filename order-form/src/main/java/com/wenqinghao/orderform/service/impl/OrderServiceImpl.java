@@ -1,11 +1,13 @@
 package com.wenqinghao.orderform.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wenqinghao.orderform.domain.dto.OrderFormDto;
 import com.wenqinghao.orderform.domain.dto.OrderGoodsDto;
 import com.wenqinghao.orderform.domain.entity.OrderForm;
 import com.wenqinghao.orderform.domain.vo.OrderAndGoodsVo;
 import com.wenqinghao.orderform.domain.vo.OrderGoodsVo;
 import com.wenqinghao.orderform.mapper.OrderFormMapper;
+import com.wenqinghao.orderform.service.ExpressService;
 import com.wenqinghao.orderform.service.OrderFormService;
 import com.wenqinghao.orderform.service.OrderGoodsService;
 import com.zhou.goodmanagement.domain.dto.GoodsDto;
@@ -27,14 +29,16 @@ public class OrderServiceImpl implements OrderFormService {
     @Resource
     OrderGoodsService orderGoodsService;
 
+    @Resource
+    ExpressService expressService;
+
     @Override
     public List<OrderAndGoodsVo> getOrdersByUid(Integer uId) {
         List<OrderForm> ordersByUid = orderFormMapper.getOrdersByUid(uId);
         List<OrderAndGoodsVo> orderAndGoodsVos = new ArrayList<>();
         GoodService goodService = new GoodService();
         for (OrderForm o :ordersByUid) {
-            Integer oId = o.getOId();
-            List<OrderGoodsVo> listGoodsByOId = orderGoodsService.getListGoodsByOId(oId);
+            List<OrderGoodsVo> listGoodsByOId = orderGoodsService.getListGoodsByOId(o.getOId());
             for (OrderGoodsVo goodsVo  : listGoodsByOId){
                 Integer gId = goodsVo.getGId();
                 GoodsDto goods = goodService.getGoods(gId);
@@ -44,6 +48,10 @@ public class OrderServiceImpl implements OrderFormService {
             BeanUtils.copyProperties(o,orderAndGoodsVo);
             orderAndGoodsVo.setList(listGoodsByOId);
             orderAndGoodsVos.add(orderAndGoodsVo);
+            Integer oExpressNumber = o.getOExpressNumber();
+            String s = oExpressNumber.toString();
+            JSONObject jsonObject = expressService.fetchCom(s);
+            orderAndGoodsVo.setJsonObject(jsonObject);
         }
         return orderAndGoodsVos;
     }

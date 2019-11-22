@@ -1,4 +1,8 @@
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.97.253.89:8848
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,3 +28,6 @@ spring:
       leak-detection-threshold: 5000
       # 测试连接数据库
       connection-test-query: SELECT 1
+feign:
+  httpclient:
+    enabled: true

@@ -8,5 +8,6 @@ spring:
     name:  wqh-api-center
   profiles:
     active: dev
+
 express:
   appcode: 5ef3935a962340e4be5d12e0483c5d51

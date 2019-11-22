@@ -46,7 +46,7 @@ public class ExpressController {
     /**
      *单号查快递公司名
      */
-    @GetMapping(value = "fetchCom")
+    @PostMapping(value = "fetchCom")
     public JSONObject fetchCom(@RequestParam(value = "nu",required = false) String nu) {
         JSONObject jsonObject = null;
         try {
